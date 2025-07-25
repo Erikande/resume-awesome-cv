@@ -1,22 +1,42 @@
-.PHONY: examples
+.PHONY: help build clean purge open watch spell lint
 
-CC = xelatex
-EXAMPLES_DIR = examples
-RESUME_DIR = examples/resume
-CV_DIR = examples/cv
-RESUME_SRCS = $(shell find $(RESUME_DIR) -name '*.tex')
-CV_SRCS = $(shell find $(CV_DIR) -name '*.tex')
+# ===== HELP =====
+help:
+	@echo "Available targets:"
+	@echo "  build    - Build PDF from src/resume.tex to output/resume.pdf"
+	@echo "  clean    - Remove auxiliary and log files in output/, including PDFs"
+	@echo "  purge    - Remove all files in output/, including PDFs"
+	@echo "  open     - Open the compiled PDF"
+	@echo "  watch    - Auto-build on changes (needs latexmk)"
+	@echo "  spell    - Spellcheck .tex sources (customize as needed)"
+	@echo "  lint     - Lint .tex sources (customize as needed)"
 
-examples: $(foreach x, coverletter cv resume, $x.pdf)
+# ===== BUILD =====
+build:
+	TEXINPUTS=src: xelatex -output-directory=output src/resume.tex
 
-resume.pdf: $(EXAMPLES_DIR)/resume.tex $(RESUME_SRCS)
-	$(CC) -output-directory=$(EXAMPLES_DIR) $<
-
-cv.pdf: $(EXAMPLES_DIR)/cv.tex $(CV_SRCS)
-	$(CC) -output-directory=$(EXAMPLES_DIR) $<
-
-coverletter.pdf: $(EXAMPLES_DIR)/coverletter.tex
-	$(CC) -output-directory=$(EXAMPLES_DIR) $<
-
+# ===== CLEAN AUX FILES ONLY =====
 clean:
-	rm -rf $(EXAMPLES_DIR)/*.pdf
+	rm -f output/*.aux output/*.log output/*.out output/*.pdf output/*.synctex.gz
+
+# ===== REMOVE *ALL* OUTPUT (INCLUDING PDF) =====
+purge:
+	rm -rf output/*
+
+# ===== OPEN PDF =====
+open:
+	open output/resume.pdf
+
+# ===== LIVE REBUILD (OPTIONAL: REQUIRES latexmk) =====
+watch:
+	TEXINPUTS=src: latexmk -xelatex -output-directory=output -pvc src/resume.tex
+
+# ===== SPELLCHECK (CUSTOMIZE IF YOU WANT) =====
+spell:
+	echo "Spellchecking (customize this if you want smarter checking)"
+	aspell -c src/*.tex
+
+# ===== LINT (CUSTOMIZE IF YOU WANT) =====
+lint:
+	echo "Linting (customize this if you use chktex or similar)"
+	chktex src/*.tex
