@@ -1,23 +1,26 @@
-### TeX ###
-## Core latex/pdflatex auxiliary files:
+# --- LaTeX build artifacts ---
 *.aux
-*.lof
 *.log
-*.lot
-*.fls
 *.out
 *.toc
+*.pdf
+*.synctex.gz
+*.fdb_latexmk
+*.fls
 
-## Intermediate documents:
-*.dvi
-*-converted-to.*
+# Output directory (except keep .gitkeep if you have one)
+output/*
+!output/.gitkeep
 
-### Editor ###
-## Vim & Emacs temp files:
-.*sw[op]
+# --- OS/Editor/IDE files ---
+.DS_Store
+.vscode/
+.idea/
+*.swp
 *~
+*#
+__pycache__/
+*.pyc
 
-### Mac OS X ###
-## Mac OS X metadata files:
-*.DS_Store
-
+# --- Other ---
+.env
